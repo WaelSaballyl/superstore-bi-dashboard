@@ -1,91 +1,35 @@
 # Superstore Sales Analysis
 
-End-to-end data analysis project covering data cleaning, exploratory analysis, SQL queries, and an interactive Power BI dashboard — all built on the classic Superstore retail dataset.
+An end-to-end analysis of the Superstore retail dataset (9,994 orders) — from cleaning the raw export in Python, through SQL business questions, to an interactive Power BI dashboard. The aim was to turn a messy transactional file into a clear read on what drives profit, and where it leaks.
 
----
+## What the data shows
 
-## Tools Used
+Technology carries the business — it leads on both revenue ($836K) and profit ($145K). Furniture is the quiet problem: it sells almost as much as Office Supplies but returns only $18K in profit, a 2.5% margin. The culprit is discounting — orders discounted above 30% consistently lose money, averaging **-$156 profit per order** in the 30–50% band, which lines up with Furniture's weak returns.
 
-- **Python** (pandas, NumPy) — data cleaning and EDA
-- **SQL** (SQLite) — business questions and aggregations
-- **Power BI** — interactive dashboard with KPIs and slicers
-- **Excel** — source data
+Regionally, the West is healthiest at a 14.9% margin, while Central sells more than the South yet earns a thinner 7.9% — a pricing or discount issue rather than a demand one. Sales peak in November and December and bottom out in February, and Standard Class shipping averages five days against 2.2 for First Class — useful context when weighing logistics cost against speed.
 
----
+## How it was built
 
-## Project Structure
+I cleaned the raw 9,994-row export in Python (pandas): parsed the date fields, engineered order-month and shipping-duration columns, and checked for nulls and duplicates. I then answered the core business questions twice — once in Python, once in SQL (SQLite) — partly to cross-check the numbers, partly to show both routes to the same insight.
 
-```
-├── 01_data_cleaning.ipynb        # data cleaning and EDA in Python
-├── superstore_queries.sql        # SQL analysis queries with comments
-├── Superstore_Cleaned.csv        # cleaned dataset ready for analysis
-├── superstore.db                 # SQLite database
-├── Superstore Sales Performance Dashboard.pbix   # Power BI dashboard
-└── Sample - Superstore.csv       # original raw dataset
-```
+The analytical dashboard is built in **Power BI**, on a small star schema (customer, date, product, geography, and ship-mode dimensions), with KPI cards, a year slicer, and charts for category performance, the monthly trend, and regional profit.
 
----
+Two companion views present the same findings differently: an **Excel** dashboard, and an **interactive web dashboard** that lays the results out as a scrollable, animated visual story. Both are presentation layers on top of the analysis — the Power BI file is the analytical core, and the web version is there to make the findings easy to explore visually.
 
-## What I Did
-
-**Step 1 — Data Cleaning (Python)**
-
-Loaded 9,994 rows and 21 columns. Checked for nulls and duplicates (none found). Converted date columns from string to datetime, extracted order month and year, and calculated shipping duration for each order. Exported the cleaned file for use in SQL and Power BI.
-
-**Step 2 — Exploratory Analysis (Python + SQL)**
-
-Ran both Python and SQL to answer the same business questions — partly to cross-validate results, partly to show both approaches.
-
-**Step 3 — Dashboard (Power BI)**
-
-Built an interactive dashboard with a year slicer, KPI cards, and three charts covering category performance, monthly trends, and regional profit distribution.
-
----
-
-## Key Findings
-
-1. **Technology** leads in both revenue ($836K) and profit ($145K). **Furniture** has nearly the same sales volume as Office Supplies but earns only $18K in profit — a 2.5% margin worth investigating.
-
-2. **West** is the strongest region at 14.9% profit margin. **Central** has higher sales than South but a worse margin (7.9%) — suggesting a pricing or discount issue.
-
-3. Discounts above 30% consistently produce losses. Orders in the 30–50% discount range average **-$156 profit per order**. This is likely a major driver of Furniture's weak margins.
-
-4. **November and December** are peak months by sales volume. **February** is the slowest month of the year by a wide margin.
-
-5. **Standard Class** shipping takes an average of 5 days vs 2.2 days for First Class — useful context if the business is evaluating logistics costs.
-
----
-
-## Dashboard Preview
+## Preview
 
 ![Dashboard](dashboard_preview.png)
 
----
+## Tools
 
-## SQL Queries
+Python (pandas, NumPy) · SQL (SQLite) · Power BI · Excel
 
-The `superstore_queries.sql` file contains four queries with inline comments explaining the logic and results. Each query mirrors the Python EDA to show the same insight reached through a different tool.
+## Structure
 
----
-
-## How to Run
-
-**Python notebook:**
-```bash
-pip install pandas numpy matplotlib seaborn
-jupyter notebook 01_data_cleaning.ipynb
-```
-
-**SQL:**
-Open `superstore.db` in DB Browser for SQLite, then run queries from `superstore_queries.sql`.
-
-**Power BI:**
-Open `Superstore Sales Performance Dashboard.pbix` in Power BI Desktop.
-
----
-
-## Dataset
-
-[Superstore Sales Dataset — Kaggle](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final)
-
-9,994 rows | 21 columns | Retail sales data (2014–2017)
+- `01_data_cleaning.ipynb` — cleaning and exploratory analysis in Python
+- `superstore_queries.sql` — the SQL business questions (SQLite)
+- `Superstore Sales Performance Dashboard.pbix` — the Power BI dashboard
+- `powerbi/` — the dashboard's star-schema data model
+- `dashboards/` — the Excel and interactive web versions
+- `data/processed/` — the summarized tables behind each view
+- `docs/` — data model and dashboard notes

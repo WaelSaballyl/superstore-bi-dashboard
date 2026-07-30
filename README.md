@@ -12,17 +12,21 @@ Regionally, the West is healthiest at a 14.9% margin, while Central sells more t
 
 I cleaned the raw 9,994-row export in Python (pandas): parsed the date fields, engineered order-month and shipping-duration columns, and checked for nulls and duplicates. I then answered the core business questions twice — once in Python, once in SQL (SQLite) — partly to cross-check the numbers, partly to show both routes to the same insight.
 
-The analytical dashboard is built in **Power BI**, on a small star schema (customer, date, product, geography, and ship-mode dimensions), with KPI cards, a year slicer, and charts for category performance, the monthly trend, and regional profit.
+**Tools:** Python (pandas, NumPy) for cleaning and EDA · SQL (SQLite) for the business questions · Power BI for the dashboard · Excel as the source and for a spreadsheet view.
 
-Two companion views present the same findings differently: an **Excel** dashboard, and an **interactive web dashboard** that lays the results out as a scrollable, animated visual story. Both are presentation layers on top of the analysis — the Power BI file is the analytical core, and the web version is there to make the findings easy to explore visually.
+## The dashboards
+
+The same findings are presented in three formats, each with a different job — it helps to be clear about which is which:
+
+- **Power BI** (`Superstore Sales Performance Dashboard.pbix`) — **the main, analytical dashboard.** Built on a small star schema (customer, date, product, geography, and ship-mode dimensions), with KPI cards, a year slicer, and charts for category performance, the monthly trend, and regional profit. This is the working tool: you filter it and read the numbers off it. The `powerbi/` folder holds its data model.
+
+- **Excel** (`dashboards/`) — **an interactive alternative** built with PivotTables and slicers, for anyone who'd rather explore the same numbers in a spreadsheet.
+
+- **Web / HTML** (`dashboards/superstore_animated_dashboard.html`) — **a visual presentation only.** A single scrollable, animated page that tells the story of the findings. It's meant to be looked at, not filtered or analyzed — think of it as the poster, not the tool. The analysis and the numbers live in the Power BI file; this is just a nicer way to show them off.
 
 ## Preview
 
 ![Dashboard](dashboard_preview.png)
-
-## Tools
-
-Python (pandas, NumPy) · SQL (SQLite) · Power BI · Excel
 
 ## Structure
 
@@ -30,6 +34,6 @@ Python (pandas, NumPy) · SQL (SQLite) · Power BI · Excel
 - `superstore_queries.sql` — the SQL business questions (SQLite)
 - `Superstore Sales Performance Dashboard.pbix` — the Power BI dashboard
 - `powerbi/` — the dashboard's star-schema data model
-- `dashboards/` — the Excel and interactive web versions
+- `dashboards/` — the Excel and web (visual) versions
 - `data/processed/` — the summarized tables behind each view
 - `docs/` — data model and dashboard notes

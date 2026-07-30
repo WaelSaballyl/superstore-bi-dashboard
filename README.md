@@ -2,43 +2,43 @@
 
 # تحليل مبيعات Superstore
 
-تحليل شامل لبيانات مبيعات Superstore (9,994 طلبًا) — من تنظيف البيانات الخام في Python، مرورًا بأسئلة العمل في SQL، وصولًا إلى لوحة Power BI تفاعلية. الهدف كان تحويل ملف معاملات فوضوي إلى قراءة واضحة لما يقود الربح، وأين يتسرّب.
+أخذت بيانات Superstore المعروفة، حوالي 9,994 طلب، وسوّيت عليها التحليل من أوله لآخره. نظّفتها في Python، حلّلتها بـSQL، وبنيت فوقها لوحة Power BI. الفكرة بسيطة: أعرف وش اللي يربّح هالنشاط فعليًا، ووين يخسر بدون ما ينتبه أحد.
 
 ![لوحة Power BI](dashboard_preview.png)
 
-## ما تكشفه الأرقام
+## أهم النتائج
 
-قطاع التقنية يحمل النشاط — يتصدّر الإيراد (836 ألف$) والربح (145 ألف$). الأثاث هو المشكلة الصامتة: يبيع بقدر المستلزمات المكتبية تقريبًا لكنه لا يربح سوى 18 ألف$، بهامش 2.5%. والسبب الخصومات — الطلبات المخفّضة فوق 30% تخسر باستمرار، بمتوسط **-156$ للطلب** في شريحة 30–50%، وهو ما يفسّر ضعف هامش الأثاث.
+قطاع التقنية هو المحرّك، الأول في المبيعات (836 ألف$) والأول في الربح (145 ألف$). الأثاث هو الاستثناء الغريب. يبيع تقريبًا مثل المستلزمات المكتبية، بس ما يجمع إلا 18 ألف$ ربح، يعني هامش 2.5% فقط. ولمّا بحثت عن السبب طلعت الخصومات: أي منتج مخفّض أكثر من 30% يميل للخسارة، والطلبات بين 30% و50% خصم تخسر حوالي 156$ لكل طلب. وهذا لحاله يفسّر ضعف أرقام الأثاث.
 
-إقليميًا، الغرب هو الأصحّ بهامش 14.9%، بينما الوسط يبيع أكثر من الجنوب ويربح أقل (7.9%) — مشكلة تسعير أو خصم، لا مشكلة طلب. المبيعات تبلغ ذروتها في نوفمبر وديسمبر وتهبط في فبراير، والشحن العادي يستغرق خمسة أيام مقابل 2.2 للشحن السريع.
+المناطق نفس الحكاية. الغرب هو الأصحّ بهامش 14.9%. الوسط لافت للنظر، يبيع أكثر من الجنوب لكن يحتفظ بربح أقل (7.9%)، وغالبًا هذا مؤشر مشكلة تسعير أو خصم، مو ضعف طلب. المبيعات ترتفع كل نوفمبر وديسمبر وتنزل بشدة في فبراير. ولو أحد يوازن بين السرعة والتكلفة، الشحن العادي ياخذ حوالي خمسة أيام مقابل يومين وربع للسريع.
 
-## كيف بُني
+## كيف بنيته
 
-نظّفت الملف الخام (9,994 صف) في Python (pandas): حلّلت حقول التاريخ، واشتققت أعمدة الشهر ومدة الشحن، وفحصت الفراغات والتكرارات. ثم أجبت الأسئلة نفسها مرتين — مرة في Python ومرة في SQL (SQLite) — للتحقق المتقاطع من الأرقام ولإظهار الطريقين للوصول لنفس النتيجة.
+التنظيف أول، في Python بـpandas. ظبّطت أعمدة التاريخ، أضفت عمود الشهر وعمود مدة الشحن، وتأكّدت ما فيه فراغات ولا تكرار مختبّي بين الـ9,994 صف. بعدها جاوبت نفس الأسئلة مرتين، مرة بـPython ومرة بـSQL، عشان كل وحدة تصير تحقّق للثانية.
 
-**الأدوات:** Python (pandas, NumPy) للتنظيف والاستكشاف · SQL (SQLite) لأسئلة العمل · Power BI للوحة · Excel كمصدر وكعرض جدولي.
+الأدوات: Python (pandas وNumPy)، وSQL (SQLite)، وPower BI، وExcel للبيانات المصدر.
 
-## الداشبوردات
+## الثلاث داشبوردات
 
-النتائج نفسها معروضة بثلاث صيغ، ولكل واحدة دورها:
+نفس النتائج بثلاث صيغ، ويهمّك تعرف كل وحدة لايش.
 
-- **Power BI** (`.pbix`) — **اللوحة التحليلية الأساسية.** مبنية على نموذج نجمي صغير (عميل، تاريخ، منتج، جغرافيا، طريقة شحن)، ببطاقات KPI وسلايسر سنة ورسوم للفئات والاتجاه الشهري والربح الإقليمي. هذه هي **الأداة العاملة** — تفلترها وتقرأ الأرقام منها. مجلد `powerbi/` فيه نموذج بياناتها.
+**Power BI** هي الأساسية. قاعدة على نموذج نجمي صغير (عميل، تاريخ، منتج، جغرافيا، طريقة شحن)، وهي اللي تستخدمها فعليًا: تفلتر وتقرأ الأرقام منها. نموذج بياناتها في مجلد `powerbi/`.
 
-- **Excel** (`dashboards/`) — **بديل تفاعلي** مبني بـPivotTables وSlicers، لمن يفضّل استكشاف الأرقام في جدول.
+**Excel** نفس التحليل بس لأهل الجداول، بـPivotTables وSlicers.
 
-- **ويب / HTML** (`dashboards/superstore_animated_dashboard.html`) — **عرض بصري فقط.** صفحة واحدة متحركة تحكي قصة النتائج؛ الغرض منها أن يُنظر إليها لا أن يُحلَّل بها — اعتبرها البوستر لا الأداة. التحليل والأرقام تعيش في ملف Power BI، وهذه مجرد طريقة أجمل لعرضها.
+**نسخة الويب** موجودة عشان تتفرّج عليها، مو عشان تشتغل بها. صفحة متحركة وحدة تمشّيك على النتائج، أقرب لبوستر منها لأداة. التحليل الحقيقي والأرقام في ملف Power BI، وهذي بس طريقة أحلى للعرض.
 
 ![الداشبورد الويب](dashboards/web_dashboard_preview.png)
 
-## البنية
+## وش في الريبو
 
-- `01_data_cleaning.ipynb` — التنظيف والتحليل الاستكشافي في Python
-- `superstore_queries.sql` — أسئلة العمل بـSQL (SQLite)
+- `01_data_cleaning.ipynb` — التنظيف والاستكشاف في Python
+- `superstore_queries.sql` — أسئلة العمل بـSQL
 - `Superstore Sales Performance Dashboard.pbix` — لوحة Power BI
-- `powerbi/` — نموذج البيانات النجمي للوحة
-- `dashboards/` — نسختا Excel والويب (البصرية)
-- `data/processed/` — الجداول الملخّصة خلف كل عرض
-- `docs/` — ملاحظات نموذج البيانات والتصميم
+- `powerbi/` — نموذج البيانات النجمي
+- `dashboards/` — نسختا Excel والويب
+- `data/processed/` — الجداول الملخّصة
+- `docs/` — ملاحظات النموذج والتصميم
 
 ---
 
@@ -47,40 +47,40 @@
 
 # Superstore Sales Analysis
 
-An end-to-end analysis of the Superstore retail dataset (9,994 orders) — from cleaning the raw export in Python, through SQL business questions, to an interactive Power BI dashboard. The aim was to turn a messy transactional file into a clear read on what drives profit, and where it leaks.
+I took the classic Superstore dataset, about 9,994 orders, and ran it start to finish. Cleaned it in Python, dug into it with SQL, and built a Power BI dashboard on top. The goal was simple: figure out what actually makes this business money, and where it quietly loses it.
 
 ![Power BI dashboard](dashboard_preview.png)
 
-## What the data shows
+## What I found
 
-Technology carries the business — it leads on both revenue ($836K) and profit ($145K). Furniture is the quiet problem: it sells almost as much as Office Supplies but returns only $18K in profit, a 2.5% margin. The culprit is discounting — orders discounted above 30% consistently lose money, averaging **-$156 profit per order** in the 30–50% band, which lines up with Furniture's weak returns.
+Technology is the workhorse. It comes first in sales ($836K) and first in profit ($145K). Furniture is the odd one out. It sells almost as much as Office Supplies but only clears $18K in profit, which is a 2.5% margin. When I dug into why, the answer was discounts. Anything marked down more than 30% tends to lose money, and orders in the 30 to 50% range lose around $156 each on average. That alone explains most of Furniture's weak numbers.
 
-Regionally, the West is healthiest at a 14.9% margin, while Central sells more than the South yet earns a thinner 7.9% — a pricing or discount issue rather than a demand one. Sales peak in November and December and bottom out in February, and Standard Class shipping averages five days against 2.2 for First Class.
+The regions tell a similar story. The West is the healthy one at a 14.9% margin. Central is the interesting case: it outsells the South but keeps less of the money (7.9%), which usually points to a pricing or discount problem rather than weak demand. Sales climb every November and December and drop off in February. And for anyone weighing speed against cost, Standard shipping runs about five days versus 2.2 for First Class.
 
-## How it was built
+## How I built it
 
-I cleaned the raw 9,994-row export in Python (pandas): parsed the date fields, engineered order-month and shipping-duration columns, and checked for nulls and duplicates. I then answered the core business questions twice — once in Python, once in SQL (SQLite) — partly to cross-check the numbers, partly to show both routes to the same insight.
+Cleaning came first, in Python with pandas. I fixed the date columns, added an order-month field and a shipping-duration field, and made sure nothing was hiding in the 9,994 rows, no nulls or duplicates. Then I answered the same questions twice, once in Python and once in SQL, so each one could double as a check on the other.
 
-**Tools:** Python (pandas, NumPy) for cleaning and EDA · SQL (SQLite) for the business questions · Power BI for the dashboard · Excel as the source and for a spreadsheet view.
+Tools: Python (pandas, NumPy), SQL (SQLite), Power BI, and Excel for the source data.
 
-## The dashboards
+## The three dashboards
 
-The same findings are presented in three formats, each with a different job:
+Same findings, three formats. It helps to know what each one is actually for.
 
-- **Power BI** (`.pbix`) — **the main, analytical dashboard.** Built on a small star schema (customer, date, product, geography, and ship-mode), with KPI cards, a year slicer, and charts for category performance, the monthly trend, and regional profit. This is the working tool: you filter it and read the numbers off it. The `powerbi/` folder holds its data model.
+**Power BI** is the real one. It sits on a small star schema (customer, date, product, geography, ship mode) and it's what you'd genuinely use day to day, filtering it and reading the numbers off it. Its data model is in the `powerbi/` folder.
 
-- **Excel** (`dashboards/`) — **an interactive alternative** built with PivotTables and slicers, for anyone who'd rather explore the same numbers in a spreadsheet.
+**Excel** is the same analysis for spreadsheet people, done with PivotTables and slicers.
 
-- **Web / HTML** (`dashboards/superstore_animated_dashboard.html`) — **a visual presentation only.** A single scrollable, animated page that tells the story of the findings; it's meant to be looked at, not filtered or analyzed — the poster, not the tool. The analysis and the numbers live in the Power BI file; this is just a nicer way to show them off.
+**The web version** is there to be looked at, not used. It's a single animated page that walks through the findings, more of a poster than a tool. The real analysis lives in the Power BI file. This is just a nicer way to show it off.
 
 ![Web dashboard](dashboards/web_dashboard_preview.png)
 
-## Structure
+## What's in the repo
 
 - `01_data_cleaning.ipynb` — cleaning and exploratory analysis in Python
-- `superstore_queries.sql` — the SQL business questions (SQLite)
+- `superstore_queries.sql` — the SQL business questions
 - `Superstore Sales Performance Dashboard.pbix` — the Power BI dashboard
-- `powerbi/` — the dashboard's star-schema data model
-- `dashboards/` — the Excel and web (visual) versions
-- `data/processed/` — the summarized tables behind each view
-- `docs/` — data model and dashboard notes
+- `powerbi/` — the star-schema data model
+- `dashboards/` — the Excel and web versions
+- `data/processed/` — the summarized tables
+- `docs/` — data model and design notes
